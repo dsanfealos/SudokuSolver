@@ -29,6 +29,8 @@ public class Main {
         System.out.println("------------");
         System.out.println(sudoku.isRepeated(1,1,7));
 
+
+
     }
 
 }

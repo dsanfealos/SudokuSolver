@@ -1,5 +1,7 @@
 package main;
 
+import java.util.Arrays;
+
 public class Sudoku {
 
     public Integer[][] matrix = new Integer[9][9];
@@ -176,16 +178,53 @@ public class Sudoku {
     }
 
     public Integer[][] solveB(){
+        //Equals Search
+        for (int guess = 1; guess<10; guess++){
+            Integer[] bannedLines = new Integer[9];
+            Integer[] bannedRows = new Integer[9];
+            int bannedCounter = 0;
+            int countLineA = 0;
+            for (Integer[] line: this.matrix){
+                int countRowA = 0;
+                for (Integer number: line){
+                    if (number == guess){
+                        bannedLines[bannedCounter] = countLineA;
+                        bannedRows[bannedCounter] = countRowA;
+                    }
+                    if (number == 0) {
+                        //Solve checking block, line, row
+                        int finalCountLineA = countLineA;
+                        int finalCountRowA = countRowA;
+                        if (!isRepeated(countLineA, countRowA, guess) &&
+                                Arrays.stream(bannedLines).noneMatch(x -> x == finalCountLineA) &&
+                                Arrays.stream(bannedRows).noneMatch(x -> x == finalCountRowA)){
+
+
+                        }
+                        //Solve checking equals???
+
+                    }
+                    countRowA++;
+                }
+                countLineA++;
+            }
+        }
+
+        //Repeated
         int countLine = 0;
         for (Integer[] line : this.matrix) {
             int countRow = 0;
             for (Integer number : line) {
                 if (number == 0) {
-                    //Solve checking block
+                    //Solve checking block, line, row
+                    for (int guess = 1; guess<10; guess++){
+                        if (!isRepeated(countLine, countRow, guess)){
 
-                    //Solve checking line
-                    //Solve checking row
-                    //Solve checking equals???
+                        }
+                        //Solve checking equals???
+
+
+                    }
                 }
                 countRow++;
             }
