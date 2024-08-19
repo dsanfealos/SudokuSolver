@@ -234,6 +234,15 @@ public class Sudoku {
         return this.matrix;
     }
 
+    public Integer[][] solveC(){
+        //Algorithm:
+        //Equals -> Lines/Rows -> Blocks -> Crossed
+        //If 60% tiles != 0 -> Notes
+        //If blocked, restart
+
+        return null;
+    }
+
     public void possibleIndividualSolutions(Integer line, Integer row){
         for (int number = 1; number <= 9; number++){
             if (!isRepeated(line, row, number)){
