@@ -1,6 +1,7 @@
 package main;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 public class Sudoku {
 
@@ -147,12 +148,13 @@ public class Sudoku {
         return block;
     }
 
+    //Prepara las notas para que no estén vacías
     public void setNotes(){
         int countLine = 0;
         for (Integer[] line: this.matrix){
             int countRow = 0;
             for (Integer number: line){
-                notes[countLine][countRow][0] = number;
+//                notes[countLine][countRow][0] = number;
                 for (int i = 0; i < 9; i++){
                     notes[countLine][countRow][i] = 0;
                 }
@@ -243,6 +245,73 @@ public class Sudoku {
         return null;
     }
 
+    public void solveEquals(){
+
+    }
+    public void solveLines(){
+        int countLines = 0;
+        for (Integer[] line: this.matrix){
+            Integer[] fullLine = {1,2,3,4,5,6,7,8,9};
+            int countRow = 0;
+            for (Integer number: line){
+                if (Arrays.asList(fullLine).contains(number) && number != 0){
+                    fullLine[countRow] = 0;
+                }
+                countRow++;
+            }
+            countRow = 0;
+            for (Integer number: line){
+                if (number == 0){
+                    for (Integer option: fullLine){
+                        if (!isRepeated(countLines, countRow, option)){
+                            //Todo mejorar
+                            this.matrix[countLines][countRow] = option;
+                        }
+                    }
+                }
+            }
+            countLines++;
+        }
+    }
+    public void solveRows(){}
+    public void solveBlocks(){}
+    public void solveCrossed(){}
+    public void solveNotes(){
+        boolean continueSolve = true;
+        possibleGlobalSolutions();
+        while (continueSolve){
+            continueSolve = false;
+            int countLine = 0;
+            for (Integer[] line : this.matrix){
+                int countRow = 0;
+                for(Integer number: line){
+                    if (number == 0){
+                        continueSolve = solveGuess(countLine, countRow);
+                        if (continueSolve)break;
+                    }
+                    countRow++;
+                }
+                if (continueSolve) break;
+                countLine++;
+            }
+        }
+    }
+
+    public void possibleGlobalSolutions(){
+        int countLine = 0;
+        for (Integer[] line : this.matrix) {
+            int countRow = 0;
+            for (Integer number : line) {
+                if (number == 0) {
+                    possibleIndividualSolutions(countLine, countRow);
+                }
+                countRow++;
+            }
+            countLine++;
+        }
+    }
+
+    //Asigna opciones para una sola casilla de notas.
     public void possibleIndividualSolutions(Integer line, Integer row){
         for (int number = 1; number <= 9; number++){
             if (!isRepeated(line, row, number)){
@@ -256,6 +325,8 @@ public class Sudoku {
         }
     }
 
+    //Para una sola casilla. Encuentra la solución y devuelve true si hay una sola opción.
+    //Si hay más de una opción no hace nada y devuelve false
     public boolean solveGuess(Integer line, Integer row){
         int counterOptions = 0;
         int solution = 0;
@@ -270,6 +341,7 @@ public class Sudoku {
             this.matrix[line][row] = solution;
             setBlocks();
             setNotes();
+            possibleGlobalSolutions();
             solved = true;
         }
         return solved;
